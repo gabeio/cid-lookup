@@ -2,7 +2,9 @@ package main
 
 /*
 
-this binary parses jcblock callerId.dat to callerId.csv
+this binary parses jcblock callerId.dat checks the most recent caller
+and if their number has a higher than 50% spam rating by mrnumber the
+caller is added to blacklist.dat
 
 */
 
