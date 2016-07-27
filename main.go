@@ -88,7 +88,8 @@ func post(req *gorequest.SuperAgent, url string, referer string, ua string, data
 	}
 }
 
-func secondtolastLine(b *bufio.Reader) string {
+// the second to last line is the line which will contain the most recent caller id
+func secondToLastLine(b *bufio.Reader) string {
 	var err error
 	var line string
 	var line2 string
@@ -140,7 +141,7 @@ func parse() {
 	cid := regexp.MustCompile("^([-BW])-DATE = ([0-9]{6})--TIME = ([0-9]{4})--NAME = (.{1,15})--NMBR = ([0-9OP]{1,})--")
 	// comma := regexp.MustCompile(",")
 	// for {
-	line := secondtolastLine(br)//br.ReadBytes('\n')
+	line := secondToLastLine(br)//br.ReadBytes('\n')
 	// if err == nil {
 	// we have a line
 	log.Printf("line: %s\n", line)
