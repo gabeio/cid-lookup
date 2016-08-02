@@ -105,11 +105,18 @@ func secondToLastLine(b *bufio.Reader) string {
 }
 
 func isItSpam(number string) bool {
+	invalid := regexp.MustCompile("is not a valid number. If you are sure that you got a phone call from a number beginning with this prefix, the caller may have 'spoofed' caller ID.")
 	spamRe := regexp.MustCompile("<span class='pull-right'>\n([0-9]{1,3})%\n</span>")
 	req := gorequest.New()
 	url := fmt.Sprintf("http://mrnumber.com/1-%s-%s-%s", number[0:3], number[3:6], number[6:10])
 	body := get(req, url, "", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.21 Safari/537.36")
-	res := spamRe.FindAllStringSubmatch(string(body), -1)
+	res := invalid.FindAllStringSubmatch(string(body), -1)
+	if len(res[0]) > 0 {
+		// it's not a valid number
+		// BLOCK
+		return true
+	}
+	res = spamRe.FindAllStringSubmatch(string(body), -1)
 	if len(res[0]) > 0 {
 		// good
 		i, err := strconv.Atoi(res[0][1])
